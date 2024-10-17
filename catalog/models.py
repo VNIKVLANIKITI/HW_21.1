@@ -1,8 +1,15 @@
 from django.db import models
-from django import forms
 
 from users.models import User
+class ArticleQuerySet(models.QuerySet):
+    def published(self):
+        return self.filter(published=True)
+class ArticleManager(models.Manager):
+    def get_queryset(self):
+        return ArticleQuerySet(self.model, using=self._db)
 
+    def published(self):
+        return self.get_queryset().published()
 
 class Category(models.Model):
     title = models.CharField(
@@ -127,8 +134,9 @@ class Article(models.Model):
         verbose_name='Счетчик просмотров',
         help_text='Укажите количество просмотров',
         default=0
-    )
-
+    )    
+    objects = ArticleManager()
+    
     def __str__(self):
         # Строковое отображение объекта
         return f"{self.title}"

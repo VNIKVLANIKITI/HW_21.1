@@ -68,7 +68,7 @@ class ProductDeleteView(DeleteView, LoginRequiredMixin):
 
 class ArticleListView(ListView):
     model = Article
-
+    published_articles = Article.objects.published()
 
 class ArticleDetailView(DetailView):
     model = Article

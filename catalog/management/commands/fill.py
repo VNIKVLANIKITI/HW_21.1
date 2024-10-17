@@ -8,8 +8,6 @@ filename_category = "categories.json"
 filename_product = "catalog.json"
 file_path = os.path.join(FIXTURES_ROOT, 'catalog')
 
-
-
 class Command(BaseCommand):
 
     @staticmethod
@@ -40,24 +38,25 @@ class Command(BaseCommand):
         product_for_create = []
         category_for_create = []
 
-        # Обходим все значения категорий из фиктсуры для получения информации об одном объекте
+        # Обходим все значения категорий из фиктсуры для получения
+        # информации об одном объекте
         for category in Command.json_read_categories():
             category_for_create.append(
                     Category(pk=category["pk"], name=category["fields"]["title"],
                              description=category["fields"]["description"], ))
-
-
             # Создаем объекты в базе с помощью метода bulk_create()
             Category.objects.bulk_create(category_for_create)
 
-            # Обходим все значения продуктов из фиктсуры для получения информации об одном объекте
+            # Обходим все значения продуктов из фиктсуры для получения
+            # информации об одном объекте
             for product in Command.json_read_products():
                 product_for_create.append(
                     Product(
                         title=product["fields"]["title"],
                         description=product["fields"]["description"],
                         image=product["fields"]["image"],
-                        category=Category.objects.get(pk=product['fields']['category']),
+                        category=Category.objects.get(pk=product['fields']
+                                                      ['category']),
                         price=product["fields"]["price"],
                         create_at=product["fields"]["create_at"],
                         update_at=product["fields"]["update_at"],
